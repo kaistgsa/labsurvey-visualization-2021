@@ -83,8 +83,6 @@ function time_radial(){
       .attr('class', 'arc')
       .style('fill', (d, i) => color(i))
 
-    console.log(data)
-
 
 
     arcs.transition()

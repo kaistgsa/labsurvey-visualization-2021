@@ -108,48 +108,48 @@ function happiness(){
         {
           "name": "연구 지도",
           "children": [
-            { "name": "학위 지도를 위한 지도 교수의 시간 할애" },
-            { "name": "학위 연구에 대한 지도 교수의 이해도" },
-            { "name": "학위 연구 방향에 대한 의견 존중"},
-            { "name": "학계 트렌드에 대한 정보"}
+            { "name": "학위 지도를 위한 지도 교수의 시간 할애", "effect":1  },
+            { "name": "학위 연구에 대한 지도 교수의 이해도", "effect":0  },
+            { "name": "학위 연구 방향에 대한 의견 존중", "effect":1 },
+            { "name": "학계 트렌드에 대한 정보", "effect":0 }
           ]
         },
         { "name": "진로 지도",
           "children": [
-            { "name": "졸업 후 진로에 대한 지도 교수의 적절한 조언" },
-            { "name": "진로 방향에 대한 나의 의사 존중" },
+            { "name": "졸업 후 진로에 대한 지도 교수의 적절한 조언", "effect":1  },
+            { "name": "진로 방향에 대한 나의 의사 존중", "effect":1  },
           ]
         },
         { "name": "지도 방식",
           "children": [
-            { "name": "연구 윤리 부족" },
-            { "name": "연구실 실적에 필요 이상으로 집착" },
-            { "name": "연구실 실적에 필요 이하로 무관심" },
-            { "name": "차별적인 지도" },
+            { "name": "연구 윤리 부족", "effect":0  },
+            { "name": "연구실 실적에 필요 이상으로 집착", "effect":-1  },
+            { "name": "연구실 실적에 필요 이하로 무관심", "effect":0  },
+            { "name": "차별적인 지도", "effect":-1  },
           ]
         },
         { "name": "연구실 체류 시간",
           "children": [
-            { "name": "주중(월~금) 체류 시간" },
-            { "name": "주말(토~일) 및 공휴일 체류 시간" },
+            { "name": "주중(월~금) 체류 시간", "effect":0  },
+            { "name": "주말(토~일) 및 공휴일 체류 시간", "effect":-1  },
           ]
         },
         { "name":"연구실 환경",
           "children": [
-            { "name": "잘 갖춰진 실험 장비" },
-            { "name": "잘 갖춰진 사무용 전자 기기" },
-            { "name": "잘 갖춰진 사무 기구" },
-            { "name": "개인 활용 공간" },
+            { "name": "잘 갖춰진 실험 장비", "effect":0  },
+            { "name": "잘 갖춰진 사무용 전자 기기", "effect":1  },
+            { "name": "잘 갖춰진 사무 기구", "effect":0  },
+            { "name": "개인 활용 공간", "effect":-1  },
           ]
         },
         { "name": "연구실 조직 문화",
           "children": [
-            { "name": "지나친 관심" },
-            { "name": "지나친 무관심" },
-            { "name": "사적인 업무 동원" },
-            { "name": "일과 후 업무 연락" },
-            { "name": "잦은 회식 등 친목 행사" },
-            { "name": "수직적 자세/태도" },
+            { "name": "지나친 관심", "effect":0 },
+            { "name": "지나친 무관심", "effect":-1  },
+            { "name": "사적인 업무 동원", "effect":0  },
+            { "name": "일과 후 업무 연락", "effect":-1  },
+            { "name": "잦은 회식 등 친목 행사", "effect":1  },
+            { "name": "수직적 자세/태도", "effect":-1  },
           ]
         },
 
@@ -161,18 +161,18 @@ function happiness(){
     .attr("height", height + margin.top + margin.bottom+400)
     .append("g")
     .attr("transform", "translate("
-      + margin.left + "," + margin.top + ")");
+      + (margin.left+50) + "," + margin.top + ")");
 
   var i = 0,
     duration = 750,
     root;
 
 // declares a tree layout and assigns the size
-  var treemap = d3.tree().size([height, width]);
+  var treemap = d3.tree().size([height*2, width]);
 
 // Assigns parent, children, height, depth
   root = d3.hierarchy(treeData, function(d) { return d.children; });
-  root.x0 = height / 2;
+  root.x0 = height/2;
   root.y0 = 0;
 
 // Collapse after the second level
@@ -188,6 +188,13 @@ function happiness(){
       d.children = null
     }
   }
+  svg.append("circle").attr("cx",-20).attr("cy",0).attr("r", 6).style("fill", "#69b3a2")
+  svg.append("circle").attr("cx",-20).attr("cy",15).attr("r", 6).style("fill", "#404080")
+  svg.append("circle").attr("cx",-20).attr("cy",30).attr("r", 6).style("fill", "#404080")
+  svg.append("text").attr("x", 0).attr("y", 0).text("variable A").style("font-size", "15px").attr("alignment-baseline","middle")
+  svg.append("text").attr("x", 0).attr("y", 15).text("variable A").style("font-size", "15px").attr("alignment-baseline","middle")
+  svg.append("text").attr("x", 0).attr("y", 30).text("variable B").style("font-size", "15px").attr("alignment-baseline","middle")
+
 
   function update(source) {
 
@@ -199,7 +206,7 @@ function happiness(){
       links = treeData.descendants().slice(1);
 
     // Normalize for fixed-depth.
-    nodes.forEach(function(d){ d.y = d.depth * 180});
+    nodes.forEach(function(d){ d.y = d.depth * 120});
 
     // ****************** Nodes section ***************************
 
@@ -220,7 +227,22 @@ function happiness(){
       .attr('class', 'node')
       .attr('r', 1e-6)
       .style("fill", function(d) {
-        return d._children ? "lightsteelblue" : "#fff";
+        if(d.effect===undefined){
+          return d._children ? "lightsteelblue" : "#fff";
+
+        }
+        else{
+
+          if(d.effect==1){
+            return "green"
+          }
+          else if(d.effect==0){
+            return "grey"
+          }
+          else {
+            return "red"
+          }
+        }
       });
 
     // Add labels for the nodes
@@ -232,7 +254,7 @@ function happiness(){
       .attr("text-anchor", function(d) {
         return d.children || d._children ? "end" : "start";
       })
-      .text(function(d) { return d.data.name; });
+      .text(function(d) { return d.data.name; })
 
     // UPDATE
     var nodeUpdate = nodeEnter.merge(node);
@@ -241,14 +263,28 @@ function happiness(){
     nodeUpdate.transition()
       .duration(duration)
       .attr("transform", function(d) {
-        return "translate(" + d.y + "," + d.x + ")";
+        return "translate(" + d.y + "," + d.x+ ")";
       });
 
     // Update the node attributes and style
     nodeUpdate.select('circle.node')
-      .attr('r', 10)
+      .attr('r',8)
       .style("fill", function(d) {
-        return d._children ? "lightsteelblue" : "#fff";
+        if(d.data.effect===undefined){
+          return d._children ? "lightsteelblue" : "#fff";
+        }
+        else{
+          if(d.data.effect==1){
+
+            return "green"
+          }
+          else if(d.data.effect==0){
+            return "grey"
+          }
+          else {
+            return "red"
+          }
+        }
       })
       .attr('cursor', 'pointer');
 
@@ -270,7 +306,6 @@ function happiness(){
       .style('fill-opacity', 1e-6);
 
     // ****************** links section ***************************
-
     // Update the links...
     var link = svg.selectAll('path.link')
       .data(links, function(d) { return d.id; });
