@@ -174,7 +174,13 @@
       <div class="row paragraph fade" id="careerpath">
         <div class="col">
           <h1>진로</h1>
-          <div id="career"></div>
+          <!-- Create a div where the graph will take place -->
+          <div style="width: 900px; height: 900px;" id="my_dataviz"></div>
+
+          <!-- Create a div for the tooltip -->
+          <div id="tooltip"></div>
+
+
         </div>
 
       </div>
@@ -205,6 +211,7 @@
   <script src="js/popPyramid.js"></script>
   <script src="js/d3chart.js"></script>
   <script src="js/d3v4.js">
+    <script src="js/d3v3.js"></script>
 
 
   <!-- Google Analytics: change UA-XXXXX-Y to be your site's ID. -->

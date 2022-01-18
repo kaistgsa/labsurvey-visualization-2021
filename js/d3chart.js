@@ -366,82 +366,7 @@ function happiness(){
   }
 }
 
-career();
-function career(){
 
-// format variables
-  var formatNumber = d3.format(",.0f"), // zero decimal places
-    format = function(d) { return formatNumber(d); },
-    color = d3.scaleOrdinal(d3.schemeCategory10);
-
-// append the svg object to the body of the page
-  var svg = d3.select("#career").append("svg")
-    .attr("width", width + margin.left + margin.right)
-    .attr("height", height + margin.top + margin.bottom)
-    .append("g")
-    .attr("transform",
-      "translate(" + margin.left + "," + margin.top + ")");
-
-// Set the sankey diagram properties
-  var sankey = d3.sankey()
-    .nodeWidth(20)
-    .nodePadding(40)
-    .size([width, height]);
-
-  var path = sankey.links();
-
-// load the data
-  d3.json("sankey.json").then(function(sankeydata) {
-
-    graph = sankey(sankeydata);
-
-// add in the links
-    var link = svg.append("g").selectAll(".link")
-      .data(graph.links)
-      .enter().append("path")
-      .attr("class", "sankeylink")
-      .attr("d", d3.sankeyLinkHorizontal())
-      .attr("stroke-width", function(d) { return d.width; });
-
-// add the link titles
-    link.append("title")
-      .text(function(d) {
-        return d.source.name + " → " +
-          d.target.name + "\n" + format(d.value); });
-
-// add in the nodes
-    var node = svg.append("g").selectAll(".node")
-      .data(graph.nodes)
-      .enter().append("g")
-      .attr("class", "node");
-
-// add the rectangles for the nodes
-    node.append("rect")
-      .attr("x", function(d) { return d.x0; })
-      .attr("y", function(d) { return d.y0; })
-      .attr("height", function(d) { return d.y1 - d.y0; })
-      .attr("width", sankey.nodeWidth())
-      .style("fill", function(d) {
-        return d.color = color(d.name.replace(/ .*/, "")); })
-      .style("stroke", function(d) {
-        return d3.rgb(d.color).darker(2); })
-      .append("title")
-      .text(function(d) {
-        return d.name + "\n" + format(d.value); });
-
-// add in the title for the nodes
-    node.append("text")
-      .attr("x", function(d) { return d.x0 - 6; })
-      .attr("y", function(d) { return (d.y1 + d.y0) / 2; })
-      .attr("dy", "0.35em")
-      .attr("text-anchor", "end")
-      .text(function(d) { return d.name; })
-      .filter(function(d) { return d.x0 < width / 2; })
-      .attr("x", function(d) { return d.x1 + 6; })
-      .attr("text-anchor", "start");
-
-  });
-}
 
 cloud();
 function cloud(){
@@ -700,5 +625,161 @@ function gender_age(){
 
 
 }
+career();
+function career() {
+  // create the svg area
+  const svg = d3.select("#my_dataviz")
+      .append("svg")
+      .attr("width", 800)
+      .attr("height", 800)
+      .append("g")
+      .attr("transform", "translate(260,260)")
+
+// create a matrix
+  const matrix = [
+    [50, 4, 32, 53, 22, 34, 10, ],
+    [3, 18, 4, 14, 24, 16, 4, ],
+    [35, 8, 171, 94, 84, 149, 64, ],
+    [75, 25, 152, 896, 555, 827, 114, ],
+    [53, 25, 137, 745, 750, 785, 158, ],
+    [54, 16, 171, 708, 483, 993, 159, ],
+    [6, 4, 44, 53, 76, 104, 135, ],
+  ];
+
+  const colors = [ "#440154ff", "#31668dff", "#37b578ff", "#fde725ff","orange","yellow","green"];
+
+  const names = ["[비연구직] 공공기관", "[비연구직] 대학", "[비연구직] 민간기업", "[연구직] 공공기관", "[연구직] 대학", "[연구직] 민간기업", "프리랜서 또는 창업",]
+
+  const res = d3.chord()
+      .padAngle(0.1)
+      .sortSubgroups(d3.descending)
+      (matrix)
+
+  var outerRadius = 180,
+      innerRadius = outerRadius + 20;
+
+  const group = svg
+      .datum(res)
+      .append("g")
+      .selectAll("g")
+      .data(function(d) { return d.groups; })
+      .enter()
+
+  group.append("g")
+      .append("path")
+      .style("fill", "grey")
+      .style("stroke", "black")
+      .attr("d", d3.arc()
+          .innerRadius(innerRadius)
+          .outerRadius(outerRadius)
+      )
+
+  group.append("g")
+      .attr("transform", function(d) { return `rotate(${(d.startAngle + d.endAngle)/2 * 180 / Math.PI - 90}) translate(`+(innerRadius+30)+`,0)`})
+      .append("text")
+      .style("font-size",10)
+      .attr("font-weight", 700)
+      .text(d=>names[d.index])
 
 
+// Add the ticks
+  group
+      .selectAll(".group-tick")
+      .data(d => groupTicks(d, 100))    // Controls the number of ticks: one tick each 25 here.
+      .join("g")
+      .attr("transform", d => `rotate(${d.angle * 180 / Math.PI - 90}) translate(`+innerRadius+`,0)`)
+      .append("line")               // By default, x1 = y1 = y2 = 0, so no need to specify it.
+      .attr("x2", 6)
+      .attr("stroke", "black")
+
+
+// Add the labels of a few ticks:
+  group
+      .selectAll(".group-tick-label")
+      .data(d => groupTicks(d, 100))
+      .enter()
+      .filter(d => d.value % 100 === 0)
+      .append("g")
+      .attr("transform", d => `rotate(${d.angle * 180 / Math.PI - 90}) translate(`+innerRadius+`,0)`)
+      .append("text")
+      .attr("x", 8)
+      .attr("dy", ".35em")
+      .attr("transform", function(d) { return d.angle > Math.PI ? "rotate(180) translate(-16)" : null; })
+      .style("text-anchor", function(d) { return d.angle > Math.PI ? "end" : null; })
+      .text(d => d.value)
+      .style("font-size", 9)
+
+
+
+
+
+  // Returns an array of tick angles and values for a given group and step.
+  function groupTicks(d, step) {
+    const k = (d.endAngle - d.startAngle) / d.value;
+    return d3.range(0, d.value, step).map(function(value) {
+      return {value: value, angle: value * k + d.startAngle};
+    });
+  }
+
+  svg
+      .datum(res)
+      .append("g")
+      .selectAll("g")
+      .data(function(d){return d.groups;})
+      .join("g")
+      .append("path")
+      .style("fill", (d,i) => colors[i])
+      .style("stroke","black")
+      .attr("d", d3.arc()
+          .innerRadius(innerRadius)
+          .outerRadius(outerRadius))
+
+  const tooltip = d3.select("#my_dataviz")
+      .append("div")
+      .style("opacity", 0)
+      .attr("class", "tooltip")
+      .style("background-color", "white")
+      .style("border", "solid")
+      .style("border-width", "1px")
+      .style("border-radius", "5px")
+      .style("padding", "10px")
+
+  const showTooltip = function(event, d) {
+    const si = d.toElement.__data__.source.index
+    const ti = d.toElement.__data__.target.index
+    tooltip
+        .style("opacity", 1)
+        .html("Source: " + names[si] + "<br>Target: " + names[ti])
+        .style("left", (event.x)/2+300 + "px")
+        .style("top", (event.y)/2+500 + "px")
+  }
+
+// A function that change this tooltip when the leaves a point: just need to set opacity to 0 again
+  var hideTooltip = function(event, d) {
+    tooltip
+        .transition()
+        //.duration(1000)
+        .style("opacity", 0)
+  }
+  svg
+      .datum(res)
+      .append("g")
+      .selectAll("path")
+      .data(d=>d)
+      .join("path")
+      .attr("d", d3.ribbon().radius(200))
+      .style("fill", d=> colors[d.source.index])
+      .style("stroke", "black")
+      .style("opacity", 0.1)
+      .on("mouseover", function(d){
+        d3.select(this)
+            .style('opacity',1)
+        showTooltip('mouseover',d)
+      })
+      .on("mouseout", function(d){
+        d3.select(this)
+            .style('opacity',0.1)
+      })
+
+
+}
