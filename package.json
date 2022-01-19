@@ -1,9 +1,9 @@
 {
-  "name": " ",
+  "name": "labsurvey-visualization-2021",
   "version": "0.0.1",
   "description": "",
   "keywords": "",
-  "license": "",
+  "license": "UNLICENSED",
   "author": "",
   "scripts": {
     "build": "parcel build index.html",
