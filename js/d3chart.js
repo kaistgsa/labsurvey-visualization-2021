@@ -1,8 +1,8 @@
+
 // set the global dimensions and margins of the graph
 const margin = {top: 10, right: 30, bottom: 30, left: 60},
   width = 300 - margin.left - margin.right,
   height = 300 - margin.top - margin.bottom;
-
 
 $(window).on('scroll',function() {
   if (checkVisible($('#participants'))) {
@@ -11,6 +11,7 @@ $(window).on('scroll',function() {
   } else {
     // do nothing
   }
+
 });
 
 function checkVisible( elm, eval ) {
@@ -74,10 +75,15 @@ function participants(){
   const svg = d3
       .select("#participants")
       .append("svg")
-      .attr("width", 500 + margin.left + margin.right)
+      .attr("width", 300 + margin.left + margin.right)
       .attr("height", 200 + margin.top + margin.bottom)
-  const chart = svg.append("g").attr("transform", `translate(${margin.left}, -10)`);
-  const width = +svg.attr("width") - margin.left - margin.right;
+  const chart = svg.append("g").attr("transform", `translate(40, -10)`);
+  var width = +svg.attr("width") - margin.left - margin.right;
+  if (width > $( window ).width()) {
+    width = $( window ).width();
+  }
+  console.log(width)
+
   const height = +svg.attr("height") + margin.top - margin.bottom;
   const grp = chart
       .append("g")
@@ -100,6 +106,22 @@ function participants(){
       .x(dataPoint => xScale(dataPoint.year))
       .y(dataPoint => yScale(dataPoint.popularity));
 
+  const circle = grp
+      .append("g")
+      .attr("transform", `translate(${margin.left},0)`)
+      .selectAll(".circle")
+      .data(data)
+      .enter()
+      .append("circle")
+      .attr("class","circle")
+      .attr("r", 3.5)
+      .attr("cx", function(d) {return xScale(d.year)})
+      .attr("cy", function(d) {return yScale(d.popularity)})
+      .style("fill", "orange")
+      .style("opacity", 0)
+
+
+  // d3.selectAll(".circle").transition().duration(5000).style("opacity",0)
 // Add path
   const path = grp
       .append("path")
@@ -109,10 +131,15 @@ function participants(){
       .attr("stroke", "black")
       .attr("stroke-linejoin", "round")
       .attr("stroke-linecap", "round")
-      .attr("stroke-width", 3)
+      .attr("stroke-width", 2)
       .attr("d", line);
 
+
   const pathLength = path.node().getTotalLength();
+  d3.selectAll(".circle")
+      .transition(d3.transition().ease(d3.easeSin).duration(pathLength))
+      .style("opacity",0.8)
+      .delay(function(d){ return (d.year-2012)*500})
 // D3 provides lots of transition options, have a play around here:
 // https://github.com/d3/d3-transition
   const transitionPath = d3
@@ -146,7 +173,7 @@ function gender_age(){
 
   var options = {
     height: 400,
-    width: 600,
+    width: 410,
     style: {
       leftBarColor: "#00C4AA",
       rightBarColor: "#8601F9"
@@ -170,15 +197,18 @@ function salary(){
     return Math.abs(b - salary) < Math.abs(a - salary) ? b : a;
   });
   var n = 100-res.indexOf(closest)
-  var width = 500,
-      height = 500;
+  var width = 400,
+      height = 400;
 // append the svg object to the body of the page
   const svg = d3.select("#salaryChart")
     .append("svg")
     .attr("width", width + margin.left + margin.right)
     .attr("height", height + margin.top + margin.bottom)
     .append("g")
-    .attr("transform", `translate(${margin.left},${margin.top})`);
+    .attr("transform", `translate(0,${margin.top})`);
+  if (width > $( window ).width()) {
+    width = $( window ).width()-50;
+  }
 
 // get the data
   d3.csv("salary.csv").then( function(data) {
@@ -256,7 +286,7 @@ happiness();
 function happiness(){
   var treeData =
     {
-      "name": "대학원 생활 행복도",
+      "name": "행복도",
       "children": [
         {
           "name": "연구 지도",
@@ -308,24 +338,25 @@ function happiness(){
 
       ]
     };
-
+ var width = 300,
+     height = 300;
   var svg = d3.select("#happy").append("svg")
-    .attr("width", width + margin.right + margin.left+400)
-    .attr("height", height + margin.top + margin.bottom+400)
+    .attr("width", width + margin.right + margin.left+100)
+    .attr("height", height + margin.top + margin.bottom+300)
     .append("g")
     .attr("transform", "translate("
-      + (margin.left+50) + "," + margin.top + ")");
+      + (margin.left-15) + "," + margin.top + ")");
 
   var i = 0,
     duration = 750,
     root;
 
 // declares a tree layout and assigns the size
-  var treemap = d3.tree().size([height*2, width]);
+  var treemap = d3.tree().size([height*2, width*2]);
 
 // Assigns parent, children, height, depth
   root = d3.hierarchy(treeData, function(d) { return d.children; });
-  root.x0 = height/2;
+  root.x0 = height;
   root.y0 = 0;
 
 // Collapse after the second level
@@ -341,12 +372,12 @@ function happiness(){
       d.children = null
     }
   }
-  svg.append("circle").attr("cx",-20).attr("cy",0).attr("r", 6).style("fill", "#69b3a2")
-  svg.append("circle").attr("cx",-20).attr("cy",15).attr("r", 6).style("fill", "#404080")
-  svg.append("circle").attr("cx",-20).attr("cy",30).attr("r", 6).style("fill", "#404080")
-  svg.append("text").attr("x", 0).attr("y", 0).text("variable A").style("font-size", "15px").attr("alignment-baseline","middle")
-  svg.append("text").attr("x", 0).attr("y", 15).text("variable A").style("font-size", "15px").attr("alignment-baseline","middle")
-  svg.append("text").attr("x", 0).attr("y", 30).text("variable B").style("font-size", "15px").attr("alignment-baseline","middle")
+  svg.append("circle").attr("cx",-20).attr("cy",0).attr("r", 6).style("fill", "#91C483").style("stroke-width",1.5).style("stroke",'#777777')
+  svg.append("circle").attr("cx",-20).attr("cy",15).attr("r", 6).style("fill", "#EEEEEE").style("stroke-width",1.5).style("stroke",'#777777')
+  svg.append("circle").attr("cx",-20).attr("cy",30).attr("r", 6).style("fill", "#FF6464").style("stroke-width",1.5).style("stroke",'#777777')
+  svg.append("text").attr("x", 0).attr("y", 0).text("유의(+)").style("font-size", "15px").attr("alignment-baseline","middle")
+  svg.append("text").attr("x", 0).attr("y", 15).text("무의").style("font-size", "15px").attr("alignment-baseline","middle")
+  svg.append("text").attr("x", 0).attr("y", 30).text("유의(-)").style("font-size", "15px").attr("alignment-baseline","middle")
 
 
   function update(source) {
@@ -359,7 +390,7 @@ function happiness(){
       links = treeData.descendants().slice(1);
 
     // Normalize for fixed-depth.
-    nodes.forEach(function(d){ d.y = d.depth * 120});
+    nodes.forEach(function(d){ d.y = d.depth * 90});
 
     // ****************** Nodes section ***************************
 
@@ -381,33 +412,37 @@ function happiness(){
       .attr('r', 1e-6)
       .style("fill", function(d) {
         if(d.effect===undefined){
-          return d._children ? "lightsteelblue" : "#fff";
-
+          return d._children ? "#FFE162" : "#fff";
         }
         else{
 
           if(d.effect==1){
-            return "green"
+            //green
+            return "#91C483"
           }
           else if(d.effect==0){
-            return "grey"
+            return "#EEEEEE"
           }
           else {
-            return "red"
+            //red
+            return "#FF6464"
           }
         }
       });
 
     // Add labels for the nodes
-    nodeEnter.append('text')
-      .attr("dy", ".35em")
+    var textNode = nodeEnter.append('text');
+      textNode.attr("dy", function(d) {
+        return d.children || d._children ? "0.35em" : "1.5em";
+      })
       .attr("x", function(d) {
-        return d.children || d._children ? -13 : 13;
+        return d.children || d._children ? -13 : -30;
       })
       .attr("text-anchor", function(d) {
         return d.children || d._children ? "end" : "start";
       })
       .text(function(d) { return d.data.name; })
+    // textNode.append("span").text(function(d) { return d.data.name; })
 
     // UPDATE
     var nodeUpdate = nodeEnter.merge(node);
@@ -424,18 +459,18 @@ function happiness(){
       .attr('r',8)
       .style("fill", function(d) {
         if(d.data.effect===undefined){
-          return d._children ? "lightsteelblue" : "#fff";
+          return d._children ? "#FFE162" : "#fff";
         }
         else{
           if(d.data.effect==1){
 
-            return "green"
+            return "#91C483"
           }
           else if(d.data.effect==0){
-            return "grey"
+            return "#EEEEEE"
           }
           else {
-            return "red"
+            return "#FF6464"
           }
         }
       })
@@ -586,12 +621,7 @@ function married(){
 career();
 function career() {
   // create the svg area
-  const svg = d3.select("#my_dataviz")
-      .append("svg")
-      .attr("width", 500)
-      .attr("height", 500)
-      .append("g")
-      .attr("transform", "translate(250,250)")
+
 
 // create a matrix
   const matrix = [
@@ -604,7 +634,7 @@ function career() {
     [6, 4, 44, 53, 76, 104, 135, ],
   ];
 
-  const colors = [ "#440154ff", "#31668dff", "#37b578ff", "#fde725ff","orange","yellow","green"];
+  const colors = ["#51addf", "#c582aa", "#005b9d", "#35a993", "#cc373c", "#f7d783", "#F47340"];
 
   const names = ["[비연구직] 공공기관", "[비연구직] 대학", "[비연구직] 민간기업", "[연구직] 공공기관", "[연구직] 대학", "[연구직] 민간기업", "프리랜서 또는 창업",]
 
@@ -613,9 +643,21 @@ function career() {
       .sortSubgroups(d3.descending)
       (matrix)
 
-  var outerRadius = 180,
-      innerRadius = outerRadius + 20;
 
+  var outerRadius = 140
+
+  if (425 > $( window ).width()) {
+    outerRadius = 100
+  }
+  var innerRadius = outerRadius + 20;
+  const svg = d3.select("#my_dataviz")
+      .append("svg")
+      .attr("width", 375)
+      .attr("height", 375)
+      .style("display","block")
+      .style("margin","auto")
+      .append("g")
+      .attr("transform", "translate("+(innerRadius+margin.left-35)+","+(innerRadius+margin.top+20)+")")
 
   const group = svg
       .datum(res)
@@ -634,11 +676,11 @@ function career() {
       )
 
   group.append("g")
-      .attr("transform", function(d) { return `rotate(${(d.startAngle + d.endAngle)/2 * 180 / Math.PI - 90}) translate(`+(innerRadius+30)+`,0)`})
+      .attr("transform", function(d) { return `rotate(${(d.startAngle + d.endAngle)/2 * 180 / Math.PI - 90}) translate(`+(innerRadius)+`,0)`})
       .append("text")
       .style("font-size",10)
       .attr("font-weight", 700)
-      .text(d=>names[d.index])
+      // .text(d=>names[d.index])
 
 
 // Add the ticks
@@ -655,7 +697,7 @@ function career() {
 // Add the labels of a few ticks:
   group
       .selectAll(".group-tick-label")
-      .data(d => groupTicks(d, 100))
+      .data(d => groupTicks(d, 50))
       .enter()
       .filter(d => d.value % 100 === 0)
       .append("g")
@@ -680,6 +722,46 @@ function career() {
     });
   }
 
+  function getGradID(d){ return "linkGrad-" + d.source.index + "-" + d.target.index; }
+  var color = d3.scaleOrdinal()
+      .domain(d3.range(6))
+      .range(colors)
+  var grads = svg.append("defs")
+      .selectAll("linearGradient")
+      .data(res)
+      .enter()
+      .append("linearGradient")
+      .attr("id", getGradID)
+      .attr("gradientUnits", "userSpaceOnUse")
+      .attr("x1", function(d, i){ return innerRadius * Math.cos((d.source.endAngle-d.source.startAngle) / 2 + d.source.startAngle - Math.PI/2); })
+      .attr("y1", function(d, i){ return innerRadius * Math.sin((d.source.endAngle-d.source.startAngle) / 2 + d.source.startAngle - Math.PI/2); })
+      .attr("x2", function(d,i){ return innerRadius * Math.cos((d.target.endAngle-d.target.startAngle) / 2 + d.target.startAngle - Math.PI/2); })
+      .attr("y2", function(d,i){ return innerRadius * Math.sin((d.target.endAngle-d.target.startAngle) / 2 + d.target.startAngle - Math.PI/2); })
+
+  // set the starting color (at 0%)
+
+  grads.append("stop")
+      .attr("offset", "0%")
+      .attr("stop-color", function(d){ return color(d.source.index)})
+
+  //set the ending color (at 100%)
+  grads.append("stop")
+      .attr("offset", "100%")
+      .attr("stop-color", function(d){ return color(d.target.index)})
+
+  svg.select("g")
+      .selectAll("path")
+      .data(res)
+      .enter()
+      .append("path")
+      .attr("class", function(d) {
+        return "chord chord-" + d.source.index + " chord-" + d.target.index // The first chord allows us to select all of them. The second chord allows us to select each individual one.
+      })
+      .style("fill", function(d){ return "url(#" + getGradID(d) + ")"; })
+      .attr("d", d3.ribbon().radius(innerRadius))
+      // .style("stroke", function(d){ return d3.rgb(color(d.target.index)).darker(); })
+
+
   svg
       .datum(res)
       .append("g")
@@ -697,36 +779,36 @@ function career() {
       .append("div")
       .style("opacity", 0)
       .attr("class", "tooltip")
+      .attr("class", "center")
+      .style("float","none")
       .style("background-color", "white")
       .style("border", "solid")
       .style("border-width", "1px")
       .style("border-radius", "5px")
       .style("padding", "10px")
+      .style("width","100%")
 
   const showTooltip = function(event, d) {
     const si = d.toElement.__data__.source.index
+    const sv = d.toElement.__data__.source.value
     const ti = d.toElement.__data__.target.index
+    const tv = d.toElement.__data__.target.value
     tooltip
         .style("opacity", 1)
-        .html("Source: " + names[si] + "<br>Target: " + names[ti])
-        .style("left", (event.x)/2+300 + "px")
+        .html("입학시점 <strong>"+names[si]+"</strong>을 희망하였으나 현재는 <strong>"+names[ti]+"</strong>을 희망하는 학우는<strong>"+sv+"</strong>명이고,<br>"
+        +"입학시점 <strong>"+names[ti]+"</strong>을 희망하였으나 현재는 <strong>"+names[si]+"</strong>을 희망하는 학우는<strong>"+tv+"</strong>명입니다.")
+        .style("left", (event.x)/2+400 + "px")
         .style("top", (event.y)/2+500 + "px")
   }
 
-// A function that change this tooltip when the leaves a point: just need to set opacity to 0 again
-  var hideTooltip = function(event, d) {
-    tooltip
-        .transition()
-        //.duration(1000)
-        .style("opacity", 0)
-  }
+
   svg
       .datum(res)
       .append("g")
       .selectAll("path")
       .data(d=>d)
       .join("path")
-      .attr("d", d3.ribbon().radius(200))
+      .attr("d", d3.ribbon().radius(innerRadius))
       .style("fill", d=> colors[d.source.index])
       .style("stroke", "black")
       .style("opacity", 0.1)
@@ -738,6 +820,8 @@ function career() {
       .on("mouseout", function(d){
         d3.select(this)
             .style('opacity',0.1)
+        // tooltip.transition(1000)
+        //     .style("opacity",0)
       })
 
 

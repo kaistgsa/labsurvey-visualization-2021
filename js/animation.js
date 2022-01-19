@@ -46,52 +46,54 @@ String.prototype.toKorChars = function() {
 
   return chars;
 }
-
-
-//타이핑할 문장
-var typingHeader  = "KAIST 대학원 총학생회 연구환경실태조사 결과 보고서";
-var typeing1=[];
-typingHeader = typingHeader.split(''); // 한글자씩자름
+if ($( window ).width()>890) {
+  //타이핑할 문장
+  var typingHeader  = "KAIST 대학원 총학생회 연구환경실태조사 결과 보고서";
+  var typeing1=[];
+  typingHeader = typingHeader.split(''); // 한글자씩자름
 
 //각글자 초성,중성,종성으로 나눠서 배열로 저장함.
-for(var i =0; i<typingHeader.length; i++){
-  typeing1[i]=typingHeader[i].toKorChars();
-}
+  for(var i =0; i<typingHeader.length; i++){
+    typeing1[i]=typingHeader[i].toKorChars();
+  }
 
 //출력할 엘리먼트요소 가져옴 -result클래스에 출력
-var resultDiv = document.getElementsByClassName("typing")[0];
+  var resultDiv = document.getElementsByClassName("typing")[0];
 
 
-var text = "";
-var i=0;
-var j=0;
-var text = '';
+  var text = "";
+  var i=0;
+  var j=0;
+  var text = '';
 
 //총글자수
-var imax = typeing1.length;
+  var imax = typeing1.length;
 
 //setInterval을 이용해 반복적으로 출력
-var inter = setInterval(typi,150);
+  var inter = setInterval(typi,150);
 
 
-function typi(){
-  //글자수만큼 반복후 종료
-  if(i<=imax-1){
-    //각 글자가 초성 중성 종성 순서대로 추가되도록
-    var jmax = typeing1[i].length;
-    resultDiv.innerHTML = text + typeing1[i][j];
-    j++;
-    if(j==jmax){
-      text+=  typeing1[i][j-1];
-      //초성중성종성 순서대로 출력된 후 글자는 저장 ( 다음 글자와 이어붙이기 위해서 )
+  function typi(){
+    //글자수만큼 반복후 종료
+    if(i<=imax-1){
+      //각 글자가 초성 중성 종성 순서대로 추가되도록
+      var jmax = typeing1[i].length;
+      resultDiv.innerHTML = text + typeing1[i][j];
+      j++;
+      if(j==jmax){
+        text+=  typeing1[i][j-1];
+        //초성중성종성 순서대로 출력된 후 글자는 저장 ( 다음 글자와 이어붙이기 위해서 )
 
-      i++;
-      j=0;
+        i++;
+        j=0;
+      }
+    } else{
+      clearInterval(inter);
     }
-  } else{
-    clearInterval(inter);
   }
 }
+
+
 
 // side nav bar progress
 var toc = document.querySelector( '.toc' );
@@ -235,19 +237,20 @@ function animateValue(obj, start, end, duration) {
 const obj = document.getElementById("value");
 animateValue(obj, 0, 1648, 5000);
 
-//fade in effect
-  $(window).scroll(function() {
-    var windowBottom = $(this).scrollTop() + $(this).innerHeight();
-    $(".fade").each(function() {
-      /* Check the location of each desired element */
-      var objectBottom = $(this).offset().top + $(this).outerHeight();
+// //fade in effect
+//   $(window).scroll(function() {
+//     var windowBottom = $(this).scrollTop() + $(this).innerHeight();
+//     $(".fade").each(function() {
+//       /* Check the location of each desired element */
+//       var objectBottom = $(this).offset().top + $(this).outerHeight();
+//
+//       /* If the element is completely within bounds of the window, fade it in */
+//       if (objectBottom < windowBottom) { //object comes into view (scrolling down)
+//         if ($(this).css("opacity")==0) {$(this).fadeTo(200,1);}
+//       }
+//     });
+//   }).scroll(); //invoke scroll-handler on page-load
 
-      /* If the element is completely within bounds of the window, fade it in */
-      if (objectBottom < windowBottom) { //object comes into view (scrolling down)
-        if ($(this).css("opacity")==0) {$(this).fadeTo(200,1);}
-      }
-    });
-  }).scroll(); //invoke scroll-handler on page-load
 
 
 

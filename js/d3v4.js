@@ -3,22 +3,30 @@
 
 time_radial()
 function time_radial(){
-  const width = 500,
-    height = 500,
+  var width = 400,
+    height = 400,
     chartRadius = height / 2 - 40;
+  if (width > $( window ).width()) {
+    width = $( window ).width();
+    chartRadius = $( window).width()/2 - 40
+  }
 
-  const color = d3v4.scaleOrdinal(['rgba(255,59,48,255)','rgba(4,222,13,255)','rgba(102,212,207)', 'rgba(32,148,250,255)',]);
+  const color = d3v4.scaleOrdinal(['#E50624','#82F104','#00D5DA', 'rgba(32,148,250,255)',]);
 
   let svg = d3v4.select('#timeChart').append('svg')
     .attr('width', width)
     .attr('height', height)
     .append('g')
-    .attr('transform', 'translate(' + width / 2 + ',' + height / 2 + ')');
+    .attr('transform', 'translate(' + (width / 2 -10)  + ',' + height / 2 + ')');
 
-  let tooltip = svg.append('g')
-      .append("text")
-      .style("font-size",100)
-      .style("visibility", "hidden")
+  // let tooltip = svg.append('g')
+  //     .append("text")
+  //     .style("font-size",100)
+  //     .style("visibility", "hidden")
+
+  var tooltipDiv = d3.select("body").append("div")
+      .attr("class", "tooltip")
+      .style("opacity", 0);
 
 
   const PI = Math.PI,
@@ -91,18 +99,33 @@ function time_radial(){
 
     arcs.transition()
       .delay((d, i) => i * 200)
-      .duration(1000)
+      .duration(8000)
       .attrTween('d', arcTween)
 
+    arcs.on("mouseover", function(d,i,n) {
+      tooltipDiv.transition()
+          .duration(200)
+          .style("opacity", 0.9);
+      tooltipDiv.html("<strong>평균 "+d.value+"시간</strong>")
+          .style("left", (d3v4.event.pageX) + "px")
+          .style("top", (d3v4.event.pageY - 28) + "px");
+    })
+        .on("mouseout", function(d) {
 
-    arcs.on('mouseover', function(d){
-      return tooltip
-          .attr("x", 100)
-          .attr("y", 100)
-          .html("<p>"+d.value+"</p>")
-          .style("visibility", "visible")
-        ;
-    });
+          tooltipDiv.transition()
+              .duration(500)
+              .style("opacity", 0);
+        });
+
+
+    // arcs.on('mouseover', function(d){
+    //   return tooltip
+    //       .attr("x", 100)
+    //       .attr("y", 100)
+    //       .html("<p>"+d.value+"</p>")
+    //       .style("visibility", "visible")
+    //     ;
+    // });
 
     arcs.on('mouseout',  function(d){return tooltip.style("visibility", "hidden");})
 
@@ -139,3 +162,5 @@ function time_radial(){
     }
   });
 }
+
+

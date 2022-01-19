@@ -390,9 +390,12 @@
 })(typeof exports === "undefined" ? d3v3.layout || (d3v3.layout = {}) : exports);
 wordcloud();
 function wordcloud(){
-    var weight = 3,   // change me
-        width = 960,
-        height = 500;
+    var weight = 4,   // change me
+        width = 400,
+        height = 400;
+    if (425 > $( window ).width()) {
+        width = 300;
+    }
 
     var fill = d3v3.scale.category20();
     d3v3.csv("words.csv", function(d) {
@@ -403,8 +406,8 @@ function wordcloud(){
         },
         function(data) {
             d3v3.layout.cloud().size([width, height]).words(data)
-                //.rotate(function() { return ~~(Math.random() * 2) * 90; })
-                .rotate(0)
+                .rotate(function() { return ~~(Math.random() * 2) * 90; })
+                // .rotate(0)
                 .font("Impact")
                 .fontSize(function(d) { return d.size; })
                 .on("end", draw)

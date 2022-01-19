@@ -1,11 +1,11 @@
 $menuWidth: 14em;
-$menuPaddingLeft: 3em;
+$menuPaddingLeft: 1.5em;
 
 
 .toc {
   position: fixed;
   left: $menuPaddingLeft;
-  top: 30em;
+  top: 12em;
   padding: 1em;
   width: $menuWidth;
   line-height: 2;

@@ -99,7 +99,7 @@
           <p>지금부터 2021년 연구환경 실태조사 결과 중 학우 여러분이 알아야 꼭 알아야 할 핵심적인 내용만을 소개드립니다!</p>
 
           <h4 id="intro-2"><span>전체 응답자 수</span></h4>
-          <div id="value" style="font-size:80px; text-align:center;">1648</div>
+          <div class="lazy" id="value" style="font-size:8vw; text-align:center;">1648</div>
           <br>
           <p>이번 연환실에서는 무려 <mark>1,648명</mark>의 학우 여러분께서 응답해주셨습니다.</p>
           <p>이 숫자는 설문 대상 학우 6,575명 중 25.06%에 해당 하는 것으로, 학우 4명 중 1명은 이번 설문에 응답한 셈이 됩니다.</p>
@@ -129,7 +129,6 @@
       </div>
 
       <div class="row paragraph" id="money">
-        <div class="col">
           <h1>경제적 환경</h1>
           <p>경제적 환경은 연구 환경을 결정하는 가장 중요한 요소입니다.</p>
           <p>이번 연환실 결과를 바탕으로 자신의 경제적 환경에 대해 진단하고, 개선이 필요한 지 고민해 보시기 바랍니다. </p>
@@ -141,7 +140,6 @@
             <div class="input-group-append">
               <button class="btn btn-outline-dark" type="submit" id="cl">입력</button></div>
             </div>
-          </div>
             <div id="salaryDiv" style="display: none;">
 
               <div class="d-flex justify-content-center">
@@ -157,14 +155,13 @@
             </div>
       </div>
 
-
       <div class="row paragraph" id="time">
         <div class="col">
-          <h1 class="fade">시간</h1>
+          <h1>시간</h1>
           <p>KAIST 대학원생의 하루는 어떨까요?</p>
           <p>우리의 시간은 돈만큼 소중합니다. 소중한 시간 자원이 어떻게 쓰이고 있는 지 확인해 보시기 바랍니다.</p>
           <div class="d-flex justify-content-center">
-            <div id="timeChart"></div>
+            <div class="lazy" id="timeChart"></div>
           </div>
 
           <p>우리 대학원생들의 주중 평균 연구실 체류시간은 <mark>9.94시간</mark>으로 조사었습니다.</p>
@@ -207,7 +204,7 @@
       <div class="row paragraph" id="wordcloud">
         <div class="col">
           <h1>워드클라우드</h1>
-          <div id="cloud" style="margin-left:-200px;"></div>
+          <div id="cloud"></div>
         </div>
 
       </div>
@@ -224,6 +221,7 @@
   <script src='https://unpkg.com/simple-statistics@7.7.0/dist/simple-statistics.min.js'></script>
   <script src="https://unpkg.com/d3-sankey@0.12.3/dist/d3-sankey.min.js"></script>
   <script src="https://cdn.jsdelivr.net/gh/holtzy/D3-graph-gallery@master/LIB/d3.layout.cloud.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.lazy/1.7.11/jquery.lazy.min.js" integrity="sha512-eviLb3jW7+OaVLz5N3B5F0hpluwkLb8wTXHOTy0CyNaZM5IlShxX1nEbODak/C0k9UdsrWjqIBKOFY0ELCCArw==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
   <script src="js/animation.js"></script>
   <script src="js/plugins.js"></script>
 
@@ -241,6 +239,10 @@
     ga('create', 'UA-XXXXX-Y', 'auto'); ga('set', 'anonymizeIp', true); ga('set', 'transport', 'beacon'); ga('send', 'pageview')
   </script>
   <script src="https://www.google-analytics.com/analytics.js" async></script>
+<script>
+
+
+</script>
 </body>
 
 </html>

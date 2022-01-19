@@ -273,7 +273,7 @@ header {
   position: sticky;
   top:0;
   background-color: #ffffff;
-  padding: 75px;
+  padding: 40px;
   text-align: center;
   font-size: 10px;
   width:100%;
@@ -288,7 +288,6 @@ nav {
 }
 aside {
   float: right;
-  width: 27.5%;
   background: #ffffff;
   padding: 20px;
 }
@@ -297,6 +296,7 @@ aside {
 nav ul {
   list-style-type: none;
   padding: 0;
+
 }
 
 article {
@@ -353,8 +353,8 @@ footer {
 
 .node circle {
   fill: #fff;
-  stroke: steelblue;
-  stroke-width: 3px;
+  stroke: #777777;
+  stroke-width: 2px;
 }
 
 .node text {
@@ -393,7 +393,7 @@ footer {
   border-right:1px solid #222222;
   padding-left:3.5%!important;
   padding-right:3.5%!important;
-  width:45%!important;
+  max-width:480px;
 }
 .center {
   display: block;
@@ -449,99 +449,6 @@ path.arc:hover {
   text-anchor: end
 }
 
-.tooltip {
-  position: absolute;
-  display: none;
-  background: rgba(0, 0, 0, 0.6);
-  border-radius: 3px;
-  box-shadow: -3px 3px 15px #888;
-  color: white;
-  padding: 6px;
-}
-
-#clickerWrapper {
-  top: 0;
-  z-index: 1;
-  display: block;
-  position: relative;
-  width: 640px;
-  /*padding-top: 5px;*/
-  visibility: auto;
-  text-align: center;
-  margin: 0 auto;
-}
-
-#clicker {
-  z-index: 1;
-  display: block;
-  font-family: Oswald;
-  font-size: 36px;
-  font-weight: 300;
-  color: #363636;
-  position: relative;
-  /*width: 80px;*/
-  text-align: center;
-  width: 30%;
-  margin: 0 auto;
-  border: 1px solid;
-  border-color: #363636;
-  cursor: pointer;
-}
-
-#progress {
-  z-index: 1;
-  display: block;
-  position: relative;
-  width: 40%;
-  height: 6px;
-  margin: 10px auto;
-  visibility: hidden;
-}
-
-#buttonWrapper{
-  z-index: 1;
-  display: block;
-  font-family: Oswald;
-  font-size: 14px;
-  font-weight: 300;
-  color: #6B6B6B;
-  position: relative;
-  width: 640px;
-  text-align: center;
-  overflow: hidden;
-  text-align: center;
-  margin: 0 auto;
-  margin-top: 30px;
-}
-
-#buttonWrapperInner{
-  position: relative;
-  width: 300px;
-  height: 30px;
-  margin: 0 auto;
-}
-
-
-#skip{
-  width: 90px;
-  cursor: pointer;
-  float: left;
-  text-align: left;
-}
-
-#reset{
-  width: 110px;
-  cursor: pointer;
-  float: left;
-}
-
-#link{
-  width: 100px;
-  cursor: pointer;
-  float: left;
-  text-align: right;
-}
-
 line {
   stroke: #000;
   stroke-width: 1px;
@@ -568,4 +475,30 @@ path.chord {
 a {
   text-decoration: none;
   color: #6B6B6B;
+}
+
+@media screen and (max-width: 890px) {
+  nav {
+   display: none;
+  }
+  aside {
+    display: none;
+
+  }
+  header {
+    position: sticky;
+    top:0;
+    background-color: #ffffff;
+    padding: 10px;
+    text-align: center;
+    font-size: 10vw;
+    width:100%;
+    border-bottom:thick double #222222;
+  }
+  @keyframes cursor{
+    0%{border-right: 0px solid #fff}
+    50%{border-right: 0px solid #000}
+    100%{border-right: 0px solid #fff}
+  }
+
 }

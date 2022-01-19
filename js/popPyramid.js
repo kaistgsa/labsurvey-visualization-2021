@@ -149,7 +149,10 @@ function pyramidBuilder(data, target, options) {
 
   var xAxisRight = d3.axisBottom()
     .scale(xScale)
-    .tickFormat(d3.format('.0%'));
+    .tickFormat(d3.format('.0%'))
+
+
+
 
   var xAxisLeft = d3.axisBottom()
     // REVERSE THE X-AXIS SCALE ON THE LEFT SIDE BY REVERSING THE RANGE
@@ -169,7 +172,8 @@ function pyramidBuilder(data, target, options) {
     .attr('transform', translation(leftBegin, 0))
     .call(yAxisLeft)
     .selectAll('text')
-    .style('text-anchor', 'middle');
+    .style('text-anchor', 'middle')
+
 
   pyramid.append('g')
     .attr('class', 'axis y right')
@@ -179,12 +183,12 @@ function pyramidBuilder(data, target, options) {
   pyramid.append('g')
     .attr('class', 'axis x left')
     .attr('transform', translation(0, h))
-    .call(xAxisLeft);
+    .call(xAxisLeft)
 
   pyramid.append('g')
     .attr('class', 'axis x right')
     .attr('transform', translation(rightBegin, h))
-    .call(xAxisRight);
+    .call(xAxisRight)
 
   // DRAW BARS
   leftBarGroup.selectAll('.bar.left')
