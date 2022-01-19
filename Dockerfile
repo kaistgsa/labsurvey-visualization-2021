@@ -1,8 +1,10 @@
 FROM node:16-slim as builder
-RUN npm install -g pnpm
 
 RUN mkdir /app
 WORKDIR /app
+
+COPY package.json package-lock.json ./
+RUN npm ci
 
 COPY . ./
 
