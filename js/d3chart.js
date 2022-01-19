@@ -616,6 +616,7 @@ function career() {
   var outerRadius = 180,
       innerRadius = outerRadius + 20;
 
+
   const group = svg
       .datum(res)
       .append("g")
