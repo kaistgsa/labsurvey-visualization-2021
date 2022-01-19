@@ -3,11 +3,11 @@
 
 time_radial()
 function time_radial(){
-  const width = 600,
-    height = 400,
+  const width = 500,
+    height = 500,
     chartRadius = height / 2 - 40;
 
-  const color = d3v4.scaleOrdinal(d3v4.schemeCategory10);
+  const color = d3v4.scaleOrdinal(['rgba(255,59,48,255)','rgba(4,222,13,255)','rgba(102,212,207)', 'rgba(32,148,250,255)',]);
 
   let svg = d3v4.select('#timeChart').append('svg')
     .attr('width', width)
@@ -15,8 +15,11 @@ function time_radial(){
     .append('g')
     .attr('transform', 'translate(' + width / 2 + ',' + height / 2 + ')');
 
-  let tooltip = d3v4.select('body').append('div')
-    .attr('class', 'tooltip');
+  let tooltip = svg.append('g')
+      .append("text")
+      .style("font-size",100)
+      .style("visibility", "hidden")
+
 
   const PI = Math.PI,
     arcMinRadius = 10,
@@ -55,18 +58,21 @@ function time_radial(){
 
     radialAxis.append('text')
       .attr('x', labelPadding)
-      .attr('y', (d, i) => -getOuterRadius(i) + arcPadding)
-      .text(d => d.name);
+      .attr('y', (d, i) => -getOuterRadius(i) + arcPadding +20)
+      .text(d => d.name)
+
 
     let axialAxis = svg.append('g')
       .attr('class', 'a axis')
       .selectAll('g')
       .data(ticks)
       .enter().append('g')
-      .attr('transform', d => 'rotate(' + (rad2deg(scale(d)) - 90) + ')');
+      .attr('transform', d => 'rotate(' + (rad2deg(scale(d)) - 90) + ')')
+        // .style('opacity',0.1);
 
     axialAxis.append('line')
-      .attr('x2', chartRadius);
+      .attr('x2', chartRadius)
+        .style('opacity',0.1);
 
     axialAxis.append('text')
       .attr('x', chartRadius + 10)
@@ -83,16 +89,22 @@ function time_radial(){
       .attr('class', 'arc')
       .style('fill', (d, i) => color(i))
 
-
-
     arcs.transition()
       .delay((d, i) => i * 200)
       .duration(1000)
       .attrTween('d', arcTween)
 
 
-    arcs.on('mousemove', showTooltip)
-    arcs.on('mouseout', hideTooltip)
+    arcs.on('mouseover', function(d){
+      return tooltip
+          .attr("x", 100)
+          .attr("y", 100)
+          .html("<p>"+d.value+"</p>")
+          .style("visibility", "visible")
+        ;
+    });
+
+    arcs.on('mouseout',  function(d){return tooltip.style("visibility", "hidden");})
 
 
     function arcTween(d, i) {
@@ -103,10 +115,11 @@ function time_radial(){
 
 
     function showTooltip(d) {
-      tooltip.style('left', (d3v4.event.pageX + 10) + 'px')
-        .style('top', (d3v4.event.pageY - 25) + 'px')
-        .style('display', 'inline-block')
-        .html(d.value);
+      console.log(d)
+      tooltip.style('left', 10 + 'px')
+        .style('top', 25 + 'px')
+        // .style('display', 'inline-block')
+        .html("<h1>d.value</h1>");
     }
 
     function hideTooltip() {

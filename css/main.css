@@ -276,14 +276,15 @@ header {
   padding: 75px;
   text-align: center;
   font-size: 10px;
+  width:100%;
   border-bottom:thick double #222222;
 }
 
 /* Create two columns/boxes that floats next to each other */
 nav {
   float: left;
-  width: 27.5%;
-  background: #ffffff;
+  width: 25%;
+  background: transparent;
 }
 aside {
   float: right;
@@ -390,6 +391,8 @@ footer {
 .container-fluid{
   border-left:1px solid #222222;
   border-right:1px solid #222222;
+  padding-left:3.5%!important;
+  padding-right:3.5%!important;
   width:45%!important;
 }
 .center {
@@ -401,7 +404,7 @@ footer {
 
 h1 {
   padding-top:100px;
-  padding-bottom: 100px;
+  padding-bottom: 50px;
   text-align: center;
   font-family: 'Nanum Myeongjo', serif;
   font-weight:700;
@@ -413,12 +416,18 @@ h3, p {
 
 h4{
   font-family: 'Nanum Myeongjo', serif;
-  margin-left:50px;
-  margin-right:50px;
   text-align: center;
+  margin-top:50px!important;
+  margin-bottom:50px!important;
 }
 
-ath.arc {
+h4 span {
+  background-color:#222222;
+  color: #f2f2f2;
+}
+
+
+path.arc {
   opacity: 0.9;
   transition: opacity 0.5s;
 }

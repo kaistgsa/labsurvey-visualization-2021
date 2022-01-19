@@ -219,25 +219,6 @@ function sync() {
 
 }
 
-
-//fade in effect
-
-$(window).on("load",function() {
-  $(window).scroll(function() {
-    var windowBottom = $(this).scrollTop() + $(this).innerHeight();
-    $(".fade").each(function() {
-      /* Check the location of each desired element */
-      var objectBottom = $(this).offset().top + $(this).outerHeight();
-
-      /* If the element is completely within bounds of the window, fade it in */
-      if (objectBottom < windowBottom) { //object comes into view (scrolling down)
-        if ($(this).css("opacity")==0) {$(this).fadeTo(200,1);}
-      }
-    });
-  }).scroll(); //invoke scroll-handler on page-load
-});
-
-
 function animateValue(obj, start, end, duration) {
   let startTimestamp = null;
   const step = (timestamp) => {
@@ -253,3 +234,22 @@ function animateValue(obj, start, end, duration) {
 
 const obj = document.getElementById("value");
 animateValue(obj, 0, 1648, 5000);
+
+//fade in effect
+  $(window).scroll(function() {
+    var windowBottom = $(this).scrollTop() + $(this).innerHeight();
+    $(".fade").each(function() {
+      /* Check the location of each desired element */
+      var objectBottom = $(this).offset().top + $(this).outerHeight();
+
+      /* If the element is completely within bounds of the window, fade it in */
+      if (objectBottom < windowBottom) { //object comes into view (scrolling down)
+        if ($(this).css("opacity")==0) {$(this).fadeTo(200,1);}
+      }
+    });
+  }).scroll(); //invoke scroll-handler on page-load
+
+
+
+
+

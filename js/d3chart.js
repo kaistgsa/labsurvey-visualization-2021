@@ -3,6 +3,159 @@ const margin = {top: 10, right: 30, bottom: 30, left: 60},
   width = 300 - margin.left - margin.right,
   height = 300 - margin.top - margin.bottom;
 
+
+$(window).on('scroll',function() {
+  if (checkVisible($('#participants'))) {
+    participants()
+    $(window).off('scroll');
+  } else {
+    // do nothing
+  }
+});
+
+function checkVisible( elm, eval ) {
+  eval = eval || "object visible";
+  var viewportHeight = $(window).height(), // Viewport Height
+      scrolltop = $(window).scrollTop(), // Scroll Top
+      y = $(elm).offset().top,
+      elementHeight = $(elm).height();
+
+  if (eval == "object visible") return ((y < (viewportHeight + scrolltop)) && (y > (scrolltop - elementHeight)));
+  if (eval == "above") return ((y < (viewportHeight + scrolltop)));
+}
+
+function participants(){
+  var data = [
+    {
+      year: 2012,
+      popularity: 770
+    },
+    {
+      year: 2013,
+      popularity: 1337
+    },
+    {
+      year: 2014,
+      popularity: 1155
+    },
+    {
+      year: 2015,
+      popularity: 1622
+    },
+    {
+      year: 2016,
+      popularity: 1474
+    },
+    {
+      year: 2017,
+      popularity: 1913,
+    },
+    {
+      year: 2018,
+      popularity: 1216,
+    },
+    {
+      year: 2019,
+      popularity: 1231,
+    },
+    {
+      year: 2020,
+      popularity: 2002,
+    },
+    {
+      year: 2021,
+      popularity: 1648,
+    }
+
+  ];
+
+// Create SVG and padding for the chart
+
+  const svg = d3
+      .select("#participants")
+      .append("svg")
+      .attr("width", 500 + margin.left + margin.right)
+      .attr("height", 200 + margin.top + margin.bottom)
+  const chart = svg.append("g").attr("transform", `translate(${margin.left}, -10)`);
+  const width = +svg.attr("width") - margin.left - margin.right;
+  const height = +svg.attr("height") + margin.top - margin.bottom;
+  const grp = chart
+      .append("g")
+      .attr("transform", `translate(-${margin.left},-${margin.top})`);
+
+// Create scales
+  const yScale = d3
+      .scaleLinear()
+      .range([height, 0])
+      .domain([750, 2200]).nice();
+
+
+  const xScale = d3
+      .scaleLinear()
+      .range([0, width])
+      .domain(d3.extent(data, dataPoint => dataPoint.year)).nice();
+
+  const line = d3
+      .line()
+      .x(dataPoint => xScale(dataPoint.year))
+      .y(dataPoint => yScale(dataPoint.popularity));
+
+// Add path
+  const path = grp
+      .append("path")
+      .attr("transform", `translate(${margin.left},0)`)
+      .datum(data)
+      .attr("fill", "none")
+      .attr("stroke", "black")
+      .attr("stroke-linejoin", "round")
+      .attr("stroke-linecap", "round")
+      .attr("stroke-width", 3)
+      .attr("d", line);
+
+  const pathLength = path.node().getTotalLength();
+// D3 provides lots of transition options, have a play around here:
+// https://github.com/d3/d3-transition
+  const transitionPath = d3
+      .transition()
+      .ease(d3.easeSin)
+      .duration(5000);
+
+  path
+      .attr("stroke-dashoffset", pathLength)
+      .attr("stroke-dasharray", pathLength)
+      .transition(transitionPath)
+      .attr("stroke-dashoffset", 0)
+
+// Add the X Axis
+  chart
+      .append("g")
+      .attr("transform", `translate(0,${height})`)
+      .call(d3.axisBottom(xScale).tickFormat(d3.format("")));
+// Add the Y Axis
+  chart
+      .append("g")
+      .attr("transform", `translate(0, 0)`)
+      .call(d3.axisLeft(yScale));
+
+
+}
+
+gender_age()
+function gender_age(){
+  var exampleData = [{ age: '23 이하', male: 25, female: 15 }, { age: '24-26', male: 349, female: 224 }, { age: '27-29', male: 546, female: 153 }, { age: '30-32', male: 172, female: 54 }, { age: '33-35', male: 48, female: 13 }, {age: '36-38', male: 19, female: 2 }, { age: '39 이상', male: 16, female: 3}, ];
+
+  var options = {
+    height: 400,
+    width: 600,
+    style: {
+      leftBarColor: "#00C4AA",
+      rightBarColor: "#8601F9"
+    }
+  }
+  pyramidBuilder(exampleData, '#pyramid', options);
+
+}
+
 // salary visualization
 $("#cl").click(function () {
   $('#salaryChart').empty();
@@ -17,6 +170,8 @@ function salary(){
     return Math.abs(b - salary) < Math.abs(a - salary) ? b : a;
   });
   var n = 100-res.indexOf(closest)
+  var width = 500,
+      height = 500;
 // append the svg object to the body of the page
   const svg = d3.select("#salaryChart")
     .append("svg")
@@ -52,29 +207,27 @@ function salary(){
       .attr("width", 30)
       .attr("height", d => height - y(d.index))
       .style("fill", function (d){
-        if(d.salary==closest){
-          return "orange"
-        }
-        else {
-          return "#69b3a2"
-        }
+          return "#00C4AA"
       })
+        .style("opacity",0.5)
+    svg.selectAll("bar")
+        .data(data)
+        .join("rect")
+        .attr("x", d => x(d.salary))
+        .attr("y", d => y(d.index))
+        .attr("width", 30)
+        .attr("height", d => height - y(d.index))
+        .style("fill", function (d){
+          if(d.salary==closest){
+            return "#8601F9"
+          }
+          else {
+            return "transparent"
+          }
+        })
+        .style("opacity", 0.5)
 
 
-
-
-
-    // append the bar rectangles to the svg element
-    // svg.selectAll("rect")
-    //   .data(data)
-    //   .join("rect")
-    //   .attr("x", 1)
-    //   .attr("transform", function(d) { return `translate(${x(d.x0)}, ${y(d.length)})`})
-    //   .attr("width", function(d) { return x(d.x1) - x(d.x0)-1})
-    //   .attr("height", function(d) { return height - y(d.length); })
-    //   .style("fill", function(d){ if(d.x0 < 100-n){return "orange"} else {return "#69b3a2"}})
-
-    // Append a vertical line to highlight the separation
     svg
       .append("line")
       .attr("x1", 0 )
@@ -368,186 +521,6 @@ function happiness(){
 
 
 
-// cloud();
-// function cloud(){
-//   var myWords = [{word: "Running", size: "80"}, {word: "Surfing", size: "20"}, {word: "Climbing", size: "50"}, {word: "Kiting", size: "30"}, {word: "Sailing", size: "20"}, {word: "Snowboarding", size: "60"} ]
-//
-// // append the svg object to the body of the page
-//   var svg = d3.select("#cloud").append("svg")
-//     .attr("width", width + margin.left + margin.right)
-//     .attr("height", height + margin.top + margin.bottom)
-//     .append("g")
-//     .attr("transform",
-//       "translate(" + margin.left + "," + margin.top + ")");
-//
-// // Constructs a new cloud layout instance. It run an algorithm to find the position of words that suits your requirements
-// // Wordcloud features that are different from one word to the other must be here
-//   var layout = d3.layout.cloud()
-//     .size([width, height])
-//     .words(myWords.map(function(d) { return {text: d.word, size:d.size}; }))
-//     .padding(5)        //space between words
-//     .rotate(function() { return ~~(Math.random() * 2) * 90; })
-//     .fontSize(function(d) { return d.size; })      // font size of words
-//     .on("end", draw);
-//   layout.start();
-//
-// // This function takes the output of 'layout' above and draw the words
-// // Wordcloud features that are THE SAME from one word to the other can be here
-//   function draw(words) {
-//     svg
-//       .append("g")
-//       .attr("transform", "translate(" + layout.size()[0] / 2 + "," + layout.size()[1] / 2 + ")")
-//       .selectAll("text")
-//       .data(words)
-//       .enter().append("text")
-//       .style("font-size", function(d) { return d.size; })
-//       .style("fill", "#69b3a2")
-//       .attr("text-anchor", "middle")
-//       .style("font-family", "Impact")
-//       .attr("transform", function(d) {
-//         return "translate(" + [d.x, d.y] + ")rotate(" + d.rotate + ")";
-//       })
-//       .text(function(d) { return d.text; });
-//   }
-// }
-
-// $("#participants").scroll( function(){
-//   console.log(event)
-//   participants();
-// });
-participants()
-function participants(){
-  var data = [
-    {
-      year: 2012,
-      popularity: 770
-    },
-    {
-      year: 2013,
-      popularity: 1337
-    },
-    {
-      year: 2014,
-      popularity: 1155
-    },
-    {
-      year: 2015,
-      popularity: 1622
-    },
-    {
-      year: 2016,
-      popularity: 1474
-    },
-    {
-      year: 2017,
-      popularity: 1913,
-    },
-    {
-      year: 2018,
-      popularity: 1216,
-    },
-    {
-      year: 2019,
-      popularity: 1231,
-    },
-    {
-      year: 2020,
-      popularity: 2002,
-    },
-    {
-      year: 2021,
-      popularity: 1648,
-    }
-
-  ];
-
-// Create SVG and padding for the chart
-
-  const svg = d3
-    .select("#participants")
-    .append("svg")
-    .attr("height", 200)
-    .attr("width", 400);
-  const margin = { top: 0, bottom: 20, left: 40, right: 20 };
-  const chart = svg.append("g").attr("transform", `translate(${margin.left},0)`);
-  const width = +svg.attr("width") - margin.left - margin.right;
-  const height = +svg.attr("height") + margin.top - margin.bottom;
-  const grp = chart
-    .append("g")
-    .attr("transform", `translate(-${margin.left},-${margin.top})`);
-
-// Create scales
-  const yScale = d3
-    .scaleLinear()
-    .range([height, 0])
-    .domain([750, d3.max(data, dataPoint => dataPoint.popularity)]).nice();
-
-
-  const xScale = d3
-    .scaleLinear()
-    .range([0, width])
-    .domain(d3.extent(data, dataPoint => dataPoint.year)).nice();
-
-  const line = d3
-    .line()
-    .x(dataPoint => xScale(dataPoint.year))
-    .y(dataPoint => yScale(dataPoint.popularity));
-
-// Add path
-  const path = grp
-    .append("path")
-    .attr("transform", `translate(${margin.left},0)`)
-    .datum(data)
-    .attr("fill", "none")
-    .attr("stroke", "black")
-    .attr("stroke-linejoin", "round")
-    .attr("stroke-linecap", "round")
-    .attr("stroke-width", 3)
-    .attr("d", line);
-
-
-  // const selectCircle = svg.selectAll(".circle")
-  //   .data(data)
-  // selectCircle.enter().append("circle").transition().ease(d3.easeSin)
-  //   .duration(2500)
-  //   .attr("transform", `translate(${margin.left},0)`)
-  //   .attr("class", "circle")
-  //   .attr("r", 5)
-  //   .attr("cx", function(d) {
-  //     return xScale(d.year)
-  //   })
-  //   .attr("cy", function(d) {
-  //     return yScale(d.popularity)
-  //   })
-
-
-
-  const pathLength = path.node().getTotalLength();
-// D3 provides lots of transition options, have a play around here:
-// https://github.com/d3/d3-transition
-  const transitionPath = d3
-    .transition()
-    .ease(d3.easeSin)
-    .duration(2500);
-
-  path
-    .attr("stroke-dashoffset", pathLength)
-    .attr("stroke-dasharray", pathLength)
-    .transition(transitionPath)
-    .attr("stroke-dashoffset", 0);
-
-
-// Add the X Axis
-  chart
-    .append("g")
-    .attr("transform", `translate(0,${height})`)
-    .call(d3.axisBottom(xScale).tickFormat(d3.format("")));
-// Add the Y Axis
-  chart
-    .append("g")
-    .attr("transform", `translate(0, 0)`)
-    .call(d3.axisLeft(yScale));
-}
 
 
 
@@ -609,31 +582,16 @@ function married(){
   })
 }
 
-gender_age()
-function gender_age(){
-  var exampleData = [{ age: '23 이하', male: 25, female: 15 }, { age: '24-26', male: 349, female: 224 }, { age: '27-29', male: 546, female: 153 }, { age: '30-32', male: 172, female: 54 }, { age: '33-35', male: 48, female: 13 }, {age: '36-38', male: 19, female: 2 }, { age: '39 이상', male: 16, female: 3}, ];
 
-  var options = {
-    height: 300,
-    width: 400,
-    style: {
-      leftBarColor: "#00C4AA",
-      rightBarColor: "#8601F9"
-    }
-  }
-  pyramidBuilder(exampleData, '#pyramid', options);
-
-
-}
 career();
 function career() {
   // create the svg area
   const svg = d3.select("#my_dataviz")
       .append("svg")
-      .attr("width", 800)
-      .attr("height", 800)
+      .attr("width", 500)
+      .attr("height", 500)
       .append("g")
-      .attr("transform", "translate(260,260)")
+      .attr("transform", "translate(250,250)")
 
 // create a matrix
   const matrix = [

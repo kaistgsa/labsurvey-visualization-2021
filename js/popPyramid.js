@@ -76,7 +76,7 @@ function pyramidBuilder(data, target, options) {
     .attr('x', (w / 2) - (margin.middle * 2))
     .attr('y', 18)
     .attr('dy', '0.32em')
-    .text('Males');
+    .text('남성');
 
   legend.append('rect')
     .attr('class', 'bar right')
@@ -90,7 +90,7 @@ function pyramidBuilder(data, target, options) {
     .attr('x', (w / 2) + (margin.middle * 3))
     .attr('y', 18)
     .attr('dy', '0.32em')
-    .text('Females');
+    .text('여성');
 
   var tooltipDiv = d3.select("body").append("div")
     .attr("class", "tooltip")
@@ -204,9 +204,9 @@ function pyramidBuilder(data, target, options) {
       tooltipDiv.transition()
         .duration(200)
         .style("opacity", 0.9);
-      tooltipDiv.html("<strong>Males Age " + i.age + "</strong>" +
-        "<br />  Population: " + prettyFormat(i.male) +
-        "<br />" + (Math.round(percentage(i.male) * 1000) / 10) + "% of Total")
+      tooltipDiv.html("<strong>남성연령 " + i.age + "</strong>" +
+        "<br />  응답자 수: " + prettyFormat(i.male) +
+        "<br />" + (Math.round(percentage(i.male) * 1000) / 10) + "%")
         .style("left", (event.pageX) + "px")
         .style("top", (event.pageY - 28) + "px");
     })
@@ -232,9 +232,9 @@ function pyramidBuilder(data, target, options) {
       tooltipDiv.transition()
         .duration(200)
         .style("opacity", 0.9);
-      tooltipDiv.html("<strong> Females Age " + i.age + "</strong>" +
-        "<br />  Population: " + prettyFormat(i.female) +
-        "<br />" + (Math.round(percentage(i.female) * 1000) / 10) + "% of Total")
+      tooltipDiv.html("<strong>여성연령 " + i.age + "</strong>" +
+        "<br />  응답자수: " + prettyFormat(i.female) +
+        "<br />" + (Math.round(percentage(i.female) * 1000) / 10) + "%")
         .style("left", (event.pageX) + "px")
         .style("top", (event.pageY - 28) + "px");
     })
