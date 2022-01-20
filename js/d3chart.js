@@ -79,8 +79,8 @@ function participants(){
       .attr("height", 200 + margin.top + margin.bottom)
   const chart = svg.append("g").attr("transform", `translate(40, -10)`);
   var width = +svg.attr("width") - margin.left - margin.right;
-  if (width > $( window ).width()) {
-    width = $( window ).width();
+  if ( $( window ).width()<380) {
+    width = $( window ).width()-100;
   }
   console.log(width)
 
@@ -206,7 +206,7 @@ function salary(){
     .attr("height", height + margin.top + margin.bottom)
     .append("g")
     .attr("transform", `translate(0,${margin.top})`);
-  if (width > $( window ).width()) {
+  if ($( window ).width()<415) {
     width = $( window ).width()-50;
   }
 
@@ -556,68 +556,6 @@ function happiness(){
 
 
 
-
-
-
-
-
-
-
-married();
-function married(){
-
-// Read data
-  const svg = d3.select("#married")
-    .append("svg")
-    .attr("width", width + margin.left + margin.right)
-    .attr("height", height + margin.top + margin.bottom)
-    .append("g")
-    .attr("transform",
-      `translate(${margin.left}, ${margin.top})`);
-
-// Read data
-  d3.csv('https://raw.githubusercontent.com/holtzy/D3-graph-gallery/master/DATA/data_hierarchy_1level.csv').then(function(data) {
-
-    // stratify the data: reformatting for d3.js
-    const root = d3.stratify()
-      .id(function(d) { return d.name; })   // Name of the entity (column name is name in csv)
-      .parentId(function(d) { return d.parent; })   // Name of the parent (column name is parent in csv)
-      (data);
-    root.sum(function(d) { return +d.value })   // Compute the numeric value for each entity
-
-    // Then d3.treemap computes the position of each element of the hierarchy
-    // The coordinates are added to the root object above
-    d3.treemap()
-      .size([width, height])
-      .padding(4)
-      (root)
-
-    // use this information to add rectangles:
-    svg
-      .selectAll("rect")
-      .data(root.leaves())
-      .join("rect")
-      .attr('x', function (d) { return d.x0; })
-      .attr('y', function (d) { return d.y0; })
-      .attr('width', function (d) { return d.x1 - d.x0; })
-      .attr('height', function (d) { return d.y1 - d.y0; })
-      // .style("stroke", "black")
-      .style("fill", "#69b3a2");
-
-    // and to add the text labels
-    svg
-      .selectAll("text")
-      .data(root.leaves())
-      .join("text")
-      .attr("x", function(d){ return d.x0+10})    // +10 to adjust position (more right)
-      .attr("y", function(d){ return d.y0+20})    // +20 to adjust position (lower)
-      .text(function(d){ return d.data.name})
-      .attr("font-size", "15px")
-      .attr("fill", "white")
-  })
-}
-
-
 career();
 function career() {
   // create the svg area
@@ -643,21 +581,26 @@ function career() {
       .sortSubgroups(d3.descending)
       (matrix)
 
-
-  var outerRadius = 140
-
-  if (425 > $( window ).width()) {
-    outerRadius = 100
+  var WW = $(window).width()
+  var outerRadius
+  if (480>WW) {
+    outerRadius = 125
   }
+  else{
+    outerRadius = 140
+  }
+
+
   var innerRadius = outerRadius + 20;
   const svg = d3.select("#my_dataviz")
       .append("svg")
-      .attr("width", 375)
-      .attr("height", 375)
+      .attr("width", 400)
+      .attr("height", 400)
       .style("display","block")
-      .style("margin","auto")
+      // .style("margin","auto")
       .append("g")
-      .attr("transform", "translate("+(innerRadius+margin.left-35)+","+(innerRadius+margin.top+20)+")")
+      .attr("transform", "translate("+(innerRadius+margin.left-20)+","+(innerRadius+margin.top+20)+")")
+
 
   const group = svg
       .datum(res)
