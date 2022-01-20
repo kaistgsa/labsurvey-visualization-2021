@@ -82,7 +82,6 @@ function participants(){
   if ( $( window ).width()<380) {
     width = $( window ).width()-100;
   }
-  console.log(width)
 
   const height = +svg.attr("height") + margin.top - margin.bottom;
   const grp = chart
@@ -197,7 +196,7 @@ function salary(){
     return Math.abs(b - salary) < Math.abs(a - salary) ? b : a;
   });
   var n = 100-res.indexOf(closest)
-  var width = 400,
+  var width = 350,
       height = 400;
 // append the svg object to the body of the page
   const svg = d3.select("#salaryChart")
@@ -205,10 +204,7 @@ function salary(){
       .attr("width", width + margin.left + margin.right)
       .attr("height", height + margin.top + margin.bottom)
       .append("g")
-      .attr("transform", `translate(0,${margin.top})`);
-  if ($( window ).width()<415) {
-    width = $( window ).width()-50;
-  }
+      .attr("transform", `translate(25,${margin.top})`);
 
 // get the data
   d3.csv("salary.csv").then( function(data) {
@@ -217,16 +213,22 @@ function salary(){
     const x = d3.scaleLinear()
         .domain([1,500])
         .range([ 0, width ]);
-    svg.append("g")
-        .attr("transform", `translate(0, ${height})`)
-        .call(d3.axisBottom(x));
-
     // Add Y axis
     const y = d3.scaleLinear()
         .domain([0, 100])
         .range([ height, 0 ]);
+
     svg.append("g")
+        .attr("transform", `translate(0, 0)`)
         .call(d3.axisLeft(y));
+
+
+    svg.append("g")
+        .attr("transform", `translate(0, ${height})`)
+        .call(d3.axisBottom(x));
+
+
+
 
     // Bars
     svg.selectAll("bar")
