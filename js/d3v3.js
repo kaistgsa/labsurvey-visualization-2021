@@ -392,9 +392,11 @@ wordcloud();
 function wordcloud(){
     var weight = 4,   // change me
         width = 400,
-        height = 400;
-    if (425 > $( window ).width()) {
-        width = 300;
+        height = 400,
+        twidth = width/2;
+    if (376 > $( window ).width()) {
+        width = 375;
+        twidth = (width/2-17.5)
     }
 
     var fill = d3v3.scale.category20();
@@ -418,7 +420,7 @@ function wordcloud(){
                     .attr("width", width)
                     .attr("height", height)
                     .append("g")
-                    .attr("transform", "translate(" + width/2 + "," + height/2 + ")")
+                    .attr("transform", "translate(" + twidth + "," + height/2 + ")")
                     .selectAll("text")
                     .data(words)
                     .enter().append("text")

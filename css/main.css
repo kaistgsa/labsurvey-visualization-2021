@@ -316,7 +316,7 @@ section::after {
   clear: both;
 }
 
-.paragraph {padding: 100px 0 100px 0 }
+.paragraph {padding: 0 0 50px 0 }
 
 
 /* Style the footer */
@@ -496,9 +496,9 @@ a {
     border-bottom:thick double #222222;
   }
   @keyframes cursor{
-    0%{border-right: 0px solid #fff}
-    50%{border-right: 0px solid #000}
-    100%{border-right: 0px solid #fff}
+    0%{border-right: 0 solid #fff}
+    50%{border-right: 0 solid #000}
+    100%{border-right: 0 solid #fff}
   }
 
 }
