@@ -225,9 +225,11 @@ function salary(){
         .call(d3.axisLeft(y));
 
 
+
+
     svg.append("g")
         .attr("transform", `translate(0, ${height})`)
-        .call(d3.axisBottom(x));
+        .call(d3.axisBottom(x).tickFormat(function(d){ return d+'만원'}));
 
 
 
