@@ -408,10 +408,15 @@ h1 {
   text-align: center;
   font-family: 'Nanum Myeongjo', serif;
   font-weight:700;
+  word-break: keep-all;
 }
 
 h3, p {
   font-family: 'Nanum Myeongjo', serif;
+}
+
+h3 {
+  word-break: keep-all;
 }
 
 h4{
@@ -419,6 +424,7 @@ h4{
   text-align: center;
   margin-top:50px!important;
   margin-bottom:50px!important;
+  word-break: keep-all;
 }
 
 h4 span {

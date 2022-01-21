@@ -92,7 +92,8 @@ function participants(){
   const yScale = d3
       .scaleLinear()
       .range([height, 0])
-      .domain([750, 2200]).nice();
+      .domain([750, 2200])
+      .nice();
 
 
   const xScale = d3
@@ -120,7 +121,6 @@ function participants(){
       .style("opacity", 0)
 
 
-  // d3.selectAll(".circle").transition().duration(5000).style("opacity",0)
 // Add path
   const path = grp
       .append("path")
@@ -139,6 +139,8 @@ function participants(){
       .transition(d3.transition().ease(d3.easeSin).duration(pathLength))
       .style("opacity",0.8)
       .delay(function(d){ return (d.year-2012)*500})
+
+
 // D3 provides lots of transition options, have a play around here:
 // https://github.com/d3/d3-transition
   const transitionPath = d3
@@ -156,19 +158,19 @@ function participants(){
   chart
       .append("g")
       .attr("transform", `translate(0,${height})`)
-      .call(d3.axisBottom(xScale).tickFormat(d3.format("")));
+      .call(d3.axisBottom(xScale).tickFormat(function(d){ return d+'년'}));
 // Add the Y Axis
   chart
       .append("g")
       .attr("transform", `translate(0, 0)`)
-      .call(d3.axisLeft(yScale));
+      .call(d3.axisLeft(yScale).tickFormat(function (d){return d+ "명"}));
 
 
 }
 
 gender_age()
 function gender_age(){
-  var exampleData = [{ age: '23 이하', male: 25, female: 15 }, { age: '24-26', male: 349, female: 224 }, { age: '27-29', male: 546, female: 153 }, { age: '30-32', male: 172, female: 54 }, { age: '33-35', male: 48, female: 13 }, {age: '36-38', male: 19, female: 2 }, { age: '39 이상', male: 16, female: 3}, ];
+  var exampleData = [{ age: '23세 이하', male: 25, female: 15 }, { age: '24-26세', male: 349, female: 224 }, { age: '27-29세', male: 546, female: 153 }, { age: '30-32세', male: 172, female: 54 }, { age: '33-35세', male: 48, female: 13 }, {age: '36-38세', male: 19, female: 2 }, { age: '39세 이상', male: 16, female: 3}, ];
 
   var options = {
     height: 400,
