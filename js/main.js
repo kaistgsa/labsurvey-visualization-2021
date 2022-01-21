@@ -13,10 +13,10 @@ $("#cl").click(function () {
   const salaryHour = numberWithCommas(parseInt(salary*10000/208))
   const salaryDiff = parseInt(salary*10000/208) - 9160
   if (salaryDiff >=0){
-    $('#salaryResult').html('당신이 받고 있는 <mark>'+salary+'만원</mark>은 주 52시간 근무를 가정 했을 때, 시급 <mark>'+salaryHour+'원</mark>이며, 이는 법정 최저시급 9,160원보다 <mark>'+numberWithCommas(salaryDiff)+'원</mark> 많은 금액입니다.')
+    $('#salaryResult').html('당신이 받고 있는 <mark>'+salary+'만 원</mark>은 주 52시간 근무를 가정했을 때, 시급 <mark>'+salaryHour+'원</mark>이며, 이는 법정 최저시급 9,160원보다 <mark>'+numberWithCommas(salaryDiff)+'원</mark> 많은 금액입니다.')
   }
   else {
-    $('#salaryResult').html('당신이 받고 있는 <mark>'+salary+'만원</mark>은 주 52시간 근무를 가정 했을 때, 시급 <mark>'+salaryHour+'원</mark>이며, 이는 법정 최저시급 9,160원에 <mark>'+numberWithCommas(-salaryDiff)+'원</mark> 못미치는 금액입니다.')
+    $('#salaryResult').html('당신이 받고 있는 <mark>'+salary+'만 원</mark>은 주 52시간 근무를 가정했을 때, 시급 <mark>'+salaryHour+'원</mark>이며, 이는 법정 최저시급 9,160원에 <mark>'+numberWithCommas(-salaryDiff)+'원</mark> 못 미치는 금액입니다.')
   }
 
 

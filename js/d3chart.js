@@ -578,7 +578,7 @@ function career() {
 
   const colors = ["#51addf", "#c582aa", "#005b9d", "#35a993", "#cc373c", "#f7d783", "#F47340"];
 
-  const names = ["[비연구직] 공공기관", "[비연구직] 대학", "[비연구직] 민간기업", "[연구직] 공공기관", "[연구직] 대학", "[연구직] 민간기업", "프리랜서 또는 창업",]
+  const names = ["[비연구직] 공공 기관", "[비연구직] 대학", "[비연구직] 민간 기업", "[연구직] 공공 기관", "[연구직] 대학", "[연구직] 민간 기업", "프리랜서 또는 창업",]
 
   const res = d3.chord()
       .padAngle(0.1)
@@ -742,8 +742,8 @@ function career() {
     const tv = d.toElement.__data__.target.value
     tooltip
         .style("opacity", 1)
-        .html("입학시점 <strong>"+names[si]+"</strong>을 희망하였으나 현재는 <strong>"+names[ti]+"</strong>을 희망하는 학우는<strong>"+sv+"</strong>명이고,<br>"
-            +"입학시점 <strong>"+names[ti]+"</strong>을 희망하였으나 현재는 <strong>"+names[si]+"</strong>을 희망하는 학우는<strong>"+tv+"</strong>명입니다.")
+        .html("입학 시점 <strong>"+names[si]+"</strong>을 희망하였으나 현재는 <strong>"+names[ti]+"</strong>을 희망하는 학우는 <strong>"+sv+"</strong>명이고,<br>"
+            +"입학 시점 <strong>"+names[ti]+"</strong>을 희망하였으나 현재는 <strong>"+names[si]+"</strong>을 희망하는 학우는 <strong>"+tv+"</strong>명입니다.")
         .style("left", (event.x)/2+400 + "px")
         .style("top", (event.y)/2+500 + "px")
   }
